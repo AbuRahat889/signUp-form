@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import auth from "../firebase";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [showError, setShowError] = useState();
@@ -43,7 +44,10 @@ const SignUp = () => {
       <Helmet>
         <title>Email | sign up</title>
       </Helmet>
-      <div className="hero bg-base-200 mt-10">
+      <div className="mt-10 text-center bg-[#3e00e75d]">
+        <h1 className="text-4xl font-semibold p-5">Sign Up</h1>
+      </div>
+      <div className="hero bg-base-200 ">
         <div className="card w-full max-w-sm shadow-2xl bg-base-100 my-10">
           <form className="card-body" onSubmit={handleSignUp}>
             <div className="form-control">
@@ -99,6 +103,12 @@ const SignUp = () => {
                 value="Sign up"
               />
             </div>
+            <p>
+              If you have an account? Please{" "}
+              <Link to="/signin" className="underline">
+               Sign in
+              </Link>
+            </p>
           </form>
           {showError && <p className="text-red-600 pl-8 pb-5">{showError}</p>}
           {success && <p className="text-green-600 pl-8 pb-5">{success}</p>}

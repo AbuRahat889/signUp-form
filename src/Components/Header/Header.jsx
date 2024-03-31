@@ -4,10 +4,10 @@ const Header = () => {
   const navLink = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink to="/" className="ml-5 font-semibold text-white text-xl">Home</NavLink>
       </li>
       <li>
-        <NavLink to="/about" className="ml-5">
+        <NavLink to="/about" className="ml-5 font-semibold text-white text-xl" >
           About
         </NavLink>
       </li>
@@ -15,7 +15,7 @@ const Header = () => {
   );
 
   return (
-    <div className="navbar bg-green-100 px-3">
+    <div className="navbar bg-[#3e00e7a9] px-3">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
