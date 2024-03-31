@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -32,6 +35,12 @@ const SignUp = () => {
         // const user = res.user;
         console.log(res.user);
         setSuccess("Successfully create your account");
+        
+
+        //verification email
+        sendEmailVerification(res.user).then(() =>
+          alert("please check your mail for verification!!")
+        );
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -82,15 +91,9 @@ const SignUp = () => {
                   {showPass ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
-
-              <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
-              </label>
             </div>
             <div>
-              <input type="checkbox" name="terms" id="" required/>
+              <input type="checkbox" name="terms" id="" required />
               <label htmlFor="terms" className="ml-2">
                 accept our <a href="#">trems and condition</a>
               </label>
@@ -106,7 +109,7 @@ const SignUp = () => {
             <p>
               If you have an account? Please{" "}
               <Link to="/signin" className="underline">
-               Sign in
+                Sign in
               </Link>
             </p>
           </form>

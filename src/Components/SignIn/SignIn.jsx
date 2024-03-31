@@ -1,6 +1,6 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import auth from "../firebase";
 import { Link } from "react-router-dom";
@@ -9,8 +9,9 @@ const SignIn = () => {
   const [showError, setShowError] = useState();
   const [success, setSuccess] = useState();
   const [showPass, setShowPass] = useState(true);
+  const emailRef = useRef(null);
 
-  const handleSignUp = (e) => {
+  const handleSignIn = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -26,18 +27,47 @@ const SignIn = () => {
     setShowError(" ");
     setSuccess(" ");
 
-    //user create
+    //sign in
     signInWithEmailAndPassword(auth, email, password)
       .then((res) => {
         // const user = res.user;
-        console.log(res.user);
-        setSuccess("Successfully sign in your account");
+        // console.log(res.user);
+
+        //email verified
+        if(res.user.emailVerified){
+            setSuccess("Successfully sign in your account");
+        }
+        else{
+          alert('please verified you email..');
+        }
+
       })
       .catch((error) => {
         const errorMessage = error.message;
         setShowError(errorMessage);
       });
   };
+
+  //handle Forgot Password
+  const handleForgotPass = ()=>{
+    const email = emailRef.current.value;
+    if(!email){
+        alert('please provide an email!!');
+        return;
+    }
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        alert('please write a valied email');
+        return;
+    }
+
+    //send validetion email
+    sendPasswordResetEmail(auth, email)
+    .then(()=> alert('check your email'))
+    .catch(error =>{
+        const errorMessage = error.message;
+    })
+
+  }
 
   return (
     <div>
@@ -50,7 +80,7 @@ const SignIn = () => {
       </div>
       <div className="hero bg-base-200 ">
         <div className="card w-full max-w-sm shadow-2xl bg-base-100 my-10">
-          <form className="card-body" onSubmit={handleSignUp}>
+          <form className="card-body" onSubmit={handleSignIn}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -58,6 +88,7 @@ const SignIn = () => {
               <input
                 name="email"
                 type="email"
+                ref={emailRef}
                 placeholder="email"
                 className="input input-bordered"
                 required
@@ -84,7 +115,7 @@ const SignIn = () => {
                 </span>
               </div>
 
-              <label className="label">
+              <label onClick={handleForgotPass} className="label">
                 <a href="#" className="label-text-alt link link-hover">
                   Forgot password?
                 </a>
